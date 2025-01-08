@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - Abo3leesh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --primary: #C42027;
+            --secondary: #C3766E;
+            --black: #000000;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        body.light-mode {
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+            transition: all 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .light-mode header {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        nav {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            color: var(--secondary);
+            transform: rotate(180deg);
+        }
+
+        main {
+            padding: 5rem 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 1rem;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-mode section {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .home-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--primary);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .home-button:hover {
+            transform: translateY(-5px);
+            background-color: var(--secondary);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            pointer-events: all;
+            transition: opacity 0.3s ease;
+        }
+
+        .light-mode .loading-screen {
+            background-color: var(--white);
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: bounce 0.5s ease-in-out infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Blog Styles */
+        .blog-post {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .light-mode .blog-post {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(196, 32, 39, 0.1);
+        }
+
+        .post-time {
+            color: var(--primary);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-title {
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-date {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-content {
+            margin-bottom: 1rem;
+        }
+
+        .blog-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 10px;
+            margin: 1rem auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-image:hover {
+            transform: scale(1.02);
+        }
+
+        .discord-section {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+        }
+
+        .discord-button {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .discord-button i {
+            margin-right: 8px;
+        }
+
+        .discord-button:hover {
+            transform: translateY(-2px);
+            background-color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .home-button {
+                bottom: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .blog-post {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="loading-screen">
+        <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav>News</nav>
+        <button class="theme-toggle" aria-label="Toggle dark/light mode">
+            <i class="fas fa-sun"></i>
+        </button>
+    </header>
+
+    <main>
+        <section id="news-section">
+            <div class="blog-post">
+                <div class="post-time">Posted Today</div>
+                <h2 class="blog-title">Replying to Thamer</h2>
+                <div class="blog-date">Post author: Abo3leesh</div>
+                <div class="blog-content">
+                    <p>Ok first of all it's not "random pointless beefs" because me and Robert (VillagerBoy) talked with Tubunga and Feral and before starting we already told them to have a chill and clean conversation, not only one time, we suggested that many times, the whole conversation was recorded by the way and I can send it to here if you want, second thing we were chilling and just watching, we didn't do anything to you guys during the last months, why were you guys talking about us and making fun of us for no reason? even tho we had forgotten about you and did not care about what you were saying' or doing, you guys were always inviting random person and telling him/her to say lies about us, you know right? ItzHanna guy, like what the heck, and also stop making fun of me by calling me with children names, we are doing that rn because YOU started it, do you remember "Fix your grammar"? now it's my turn to say that, it's "also ali, you're a Muslim right?" not "your", anyways yes I am a Muslim, I'm not doing anything haram, remember when I had a beef with Tubunga, you literally blocked me and didn't even answer me, that problem was between me and Tubunga, not even with you or Rishi, but you know Tubunga is dirty so he forced all admins to block me and attack me, How pathetic and ridiculous? It's not haram now since everything is visable and everything is legit, no caps, yes people can have fun but not at the expense of my reputation and my other friends (My friends are here on this server, I don't mean you or Tubunga or PortalTeam by the way) I think it's enough to talk, and Rishi won't stop yapping there, whenever I post a thing he immediately head to the media channel there and starts typing (yap yap yap) like bruh, find a life for yourself dude, At least I'm not beefing only, I have friends to play and chill with them.</p>
+                    <p>This post contains detailed information and proof of various incidents that have occurred.</p>
+                </div>
+                <img src="thamer.png" alt="Evidence Screenshot" class="blog-image">
+            </div>
+
+            <div class="blog-post">
+                <div class="post-time">Posted two days ago</div>
+                <h2 class="blog-title">Elixir</h2>
+                <div class="blog-date">Post author: Abo3leesh</div>
+                <div class="blog-content">
+                    <p>We're excited to say that we are working on a new server, called Elixir, currently there's no release date for it, but to make sure the version will be available on 1.1.5! We will try to launch it on 0.14.x too if possible.</p>
+                    <p>The server will feature a special system, private maps, and custom plugins. All copyrights are reserved to us, and the server name is protected.</p>
+                    <p>Stay tuned for more information and exciting leaks about the features we're developing!</p>
+                </div>
+            </div>
+
+            <div class="blog-post">
+                <div class="post-time">Posted two days ago</div>
+                <h2 class="blog-title">New Plugin!</h2>
+                <div class="blog-date">Posted author: Abo3leesh</div>
+                <div class="blog-content">
+                    <p>Check out our new plugin! LuckyRoyal v1.1</p>
+                    <p>This plugin was made for survival servers especially, for more info you can ask me on discord.</p>
+                </div>
+                <img src="lucky.png" alt="Plugin Preview" class="blog-image">
+            </div>
+
+            <div class="blog-post">
+                <div class="post-time">Posted 6 days ago</div>
+                <h2 class="blog-title">BeefHub!</h2>
+                <div class="blog-date">Post author: Abo3leesh</div>
+                <div class="blog-content">
+                    <p>Recently some kids called PoopTeam are attacking us and making fun of us for no reason so we are going to teach them a small lesson about how to respect others and stop being racist and arrogant, You all are welcome to our discord server, the link below.</p>
+                    <img src="bh.png" alt="Evidence Screenshot" class="blog-image">
+                </div>
+            </div>
+
+            <div class="discord-section">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">Join Our Community</h3>
+                <a href="https://discord.gg/N7eCe8UGwM" class="discord-button">
+                    <i class="fab fa-discord"></i>
+                    Discord Server
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <a href="index.html" class="home-button" aria-label="Go to home page">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <script>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+        const loadingScreen = document.querySelector('.loading-screen');
+        const homeButton = document.querySelector('.home-button');
+
+        // Initial page load animation
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 1000);
+        });
+
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        });
+
+        // Section animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 200);
+                }
+            });
+        }, { 
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Loading animation for home button
+        homeButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadingScreen.classList.remove('hidden');
+            setTimeout(() => {
+                window.location.href = homeButton.href;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
+

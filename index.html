@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abo3leesh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --primary: #C42027;
+            --secondary: #C3766E;
+            --black: #000000;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        body.light-mode {
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+            transition: all 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .light-mode header {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        nav {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            color: var(--secondary);
+            transform: rotate(180deg);
+        }
+
+        main {
+            padding: 5rem 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            transition: color 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section {
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 1rem;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .light-mode section {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(196, 32, 39, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .video-container:hover {
+            transform: scale(1.02);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 120px);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(196, 32, 39, 0.1);
+            color: var(--black);
+            padding: 0.8rem;
+            border-radius: 15px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            height: 120px;
+            width: 120px;
+            margin: 0;
+            text-align: center;
+        }
+
+        .button span {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .button:hover {
+            background-color: rgba(196, 32, 39, 0.2);
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(196, 32, 39, 0.2);
+        }
+
+        .button img {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .button:hover img {
+            transform: scale(1.1);
+        }
+
+        .light-mode .button {
+            color: var(--black);
+        }
+
+        body:not(.light-mode) .button {
+            color: var(--white);
+        }
+
+        .discord-button {
+            display: inline-block;
+            background-color: #C3766E;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            border: none;
+        }
+
+        .discord-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        #social {
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            font-size: 2.5rem; /* Increased size */
+            color: var(--black); /* Default color for light mode */
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Add dark mode styles for social icons */
+        body:not(.light-mode) .social-link {
+            color: var(--white);
+        }
+
+        .social-link:hover {
+            color: var(--secondary);
+            transform: translateY(-5px) scale(1.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: rgba(196, 32, 39, 0.05);
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        footer p {
+            color: var(--primary); /* Make footer text red */
+        }
+
+        footer a {
+            color: var(--primary); /* Make footer links red */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--secondary);
+        }
+
+        .blog-post {
+            margin-bottom: 2rem;
+            padding: 1rem;
+        }
+
+        .blog-date {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            .buttons {
+                grid-template-columns: repeat(2, 100px);
+            }
+
+            .button {
+                height: 100px;
+                width: 100px;
+            }
+
+            .button span {
+                font-size: 0.8rem;
+            }
+
+            .button img {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header>
+        <nav>Home</nav>
+        <button class="theme-toggle" aria-label="Toggle dark/light mode">
+            <i class="fas fa-sun"></i>
+        </button>
+    </header>
+
+    <main>
+        <h1>Abo3leesh</h1>
+
+        <section id="info">
+            <h3>Welcome to my website!</h3>
+            <p>Hello, I'm Ali or aka Abo3leesh, minecraft player, I like making pocketmine plugins and learn new things, I'm on the last year of the school currently, and on the next year I will study the Engineering on the university, I live in the earth, that's all about me.</p>
+        </section>
+
+        <section id="video">
+            <h3>Last Videos</h3>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/a0mpx4o6dJY?si=yjRo41ornytfdS51" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section id="navigation">
+            <h2>Get Started!</h2>
+            <div class="buttons">
+                <a href="news.html" class="button">
+                    <img src="news.png" alt="">
+                    <span>News</span>
+                </a>
+                <a href="plugins.html" class="button">
+                    <img src="php.png" alt="">
+                    <span>Plugins</span>
+                </a>
+            </div>
+        </section>
+
+        <section id="blog">
+            <h2>Latest News</h2>
+            <div class="blog-post">
+                <h3>Elixir</h3>
+                <div class="blog-date">Posted one day ago</div>
+                <p>We're excited to say that we are working on a new server, called Elixir, currently there's no release date for it, but to make sure the version will be available on 1.1.5! We will try to launch it on 0.14.x too if possible, The server will have a special system and private maps and plugins, Copyrights are saved to us and the server name is not free to use or copy, currently there's no informations about it but we'll share some leaks in the future, stay tuned and get ready for interesting experience!</p>
+            </div>
+        </section>
+
+        <section id="clan">
+            <h2>BeefHub Clan</h2>
+            <p>The place where all beefs happen, All exposing videos and the bad things about PortalTeam are there, Searching for some fun? Then you can join our clan, It's public!</p>
+            <a href="https://discord.gg/N7eCe8UGwM" class="discord-button">
+                Join the discord Server!
+            </a>
+        </section>
+
+        <section id="social">
+            <h2>Connect With Us</h2>
+            <div class="social-links">
+                <a href="https://youtube.com/@Abo3leesh" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://instagram.com/abo3leesh_net" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://discord.gg/N7eCe8UGwM" class="social-link" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>All rights reserved for Abo3leesh ©2025</p>
+        <p style="font-size: 0.8rem;"><a href="mailto:business.abo3leesh@gmail.com">contact@abo3leesh.net</a></p>
+    </footer>
+
+    <script>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 200);
+                }
+            });
+        }, { 
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
+
